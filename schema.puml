@@ -1,0 +1,94 @@
+@startuml
+!theme spacelab
+hide circle
+skinparam linetype ortho
+
+title Clinic Management System - Database Schema (MongoDB)
+
+entity "User" as User {
+  * _id : ObjectId
+  --
+  name : String
+  email : String
+  password : String
+  role : Enum (Admin, Patient, Doctor)
+  phone : String
+}
+
+entity "Doctor" as Doctor {
+  * _id : ObjectId
+  --
+  user_id : ObjectId <<Ref: User>>
+  specialty : String
+  experience : Number
+}
+
+entity "Appointment" as Appointment {
+  * _id : ObjectId
+  --
+  patient_id : ObjectId <<Ref: User>>
+  doctor_id : ObjectId <<Ref: Doctor>>
+  date : Date
+  time : String
+  status : Enum (Pending, Confirmed, Completed)
+}
+
+entity "MedicalRecord" as MedicalRecord {
+  * _id : ObjectId
+  --
+  patient_id : ObjectId <<Ref: User>>
+  doctor_id : ObjectId <<Ref: Doctor>>
+  diagnosis : String
+  notes : String
+  date : Date
+}
+
+entity "Prescription" as Prescription {
+  * _id : ObjectId
+  --
+  medical_record_id : ObjectId <<Ref: MedicalRecord>>
+  medication : String
+  dosage : String
+  instructions : String
+}
+
+entity "Invoice" as Invoice {
+  * _id : ObjectId
+  --
+  patient_id : ObjectId <<Ref: User>>
+  appointment_id : ObjectId <<Ref: Appointment>>
+  total_amount : Number
+  status : Enum (Unpaid, Paid)
+}
+
+entity "Payment" as Payment {
+  * _id : ObjectId
+  --
+  invoice_id : ObjectId <<Ref: Invoice>>
+  amount_paid : Number
+  payment_method : String
+  date : Date
+}
+
+entity "Notification" as Notification {
+  * _id : ObjectId
+  --
+  user_id : ObjectId <<Ref: User>>
+  message : String
+  isRead : Boolean
+  createdAt : Date
+}
+
+' Define Relationships (MongoDB References)
+User ||--o| Doctor : "1 to 0..1"
+User ||--o{ Appointment : "1 to Many (Patient)"
+Doctor ||--o{ Appointment : "1 to Many"
+User ||--o{ MedicalRecord : "1 to Many (Patient)"
+Doctor ||--o{ MedicalRecord : "1 to Many"
+MedicalRecord ||--o{ Prescription : "1 to Many"
+User ||--o{ Invoice : "1 to Many"
+Appointment ||--o| Invoice : "1 to 1"
+Invoice ||--o{ Payment : "1 to Many"
+User ||--o{ Notification : "1 to Many"
+
+@enduml

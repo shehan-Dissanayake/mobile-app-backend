@@ -1,0 +1,45 @@
+@startuml
+!theme spacelab
+skinparam componentStyle rectangle
+skinparam linetype ortho
+
+title Clinic Management System - Final Architecture Diagram
+
+package "Client Tier (Frontend)" {
+    component "React Native (Expo) Mobile App" as MobileApp #LightBlue {
+        [Admin Portal]
+        [Doctor Portal]
+        [Patient Portal]
+    }
+}
+
+package "Application Tier (Backend)" {
+    node "Node.js & Express REST API" as Backend #LightGreen {
+        [Auth & Users API]
+        [Doctors API]
+        [Appointments API]
+        [Medical Records API]
+        [Prescriptions API]
+        [Invoices & Payments API]
+        [Notifications API]
+    }
+}
+
+package "Data Tier (Database)" {
+    database "MongoDB Atlas" as Database #LightYellow {
+        [Users Collection]
+        [Doctors Collection]
+        [Appointments Collection]
+        [Medical Records Collection]
+        [Prescriptions Collection]
+        [Invoices & Payments Collections]
+        [Notifications Collection]
+    }
+}
+
+' Define Relationships and Data Flow
+MobileApp <--> Backend : "HTTP/HTTPS Requests\n(Axios / REST API)\n<color:blue>JSON Data</color>"
+
+Backend <--> Database : "Mongoose ODM\n(NoSQL Database Queries)"
+
+@enduml

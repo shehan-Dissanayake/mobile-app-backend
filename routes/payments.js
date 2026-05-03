@@ -6,7 +6,11 @@ const Invoice = require('../models/Invoice');
 const Notification = require('../models/Notification'); 
 
 // STRIPE DEPENDENCY
+<<<<<<< HEAD
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+=======
+const stripe = require('stripe')('sk_test_51TL770Axgv4sFwCFUgBYpr7RpaYbpiBqcnqmk1rjfNfkEpCdflC4bBlL7E3a0dtpdTjaKcyJgtDX1Wh5w1Uf6l9w00FwrljmBw'); 
+>>>>>>> 8a2849b (Add remaining backend base files to main)
 
 // 1. Create a Payment Intent (FOR MOBILE)
 router.post('/create-payment-intent', async (req, res) => {
